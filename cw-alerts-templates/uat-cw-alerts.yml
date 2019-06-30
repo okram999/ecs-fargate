@@ -1,0 +1,143 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AVA Applications cw alerts
+Resources:
+  LowCpuUsageAlarmBackendConsumerEvnts:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-uat-reasac-ava-backend-consumer-events
+      AlarmDescription: Low CPU Alert - check invoice processing in uat
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-backend-consumer-events
+        - Name: ClusterName
+          Value: reasac-ava-uat
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:577595225843:AVA-UAT-ALERTS
+  LowCpuUsageAlarmBackendConsumerData:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-uat-reasac-ava-backend-consumer-data
+      AlarmDescription: Low CPU Alert - check invoice processing in uat
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-backend-consumer-data
+        - Name: ClusterName
+          Value: reasac-ava-uat
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:577595225843:AVA-UAT-ALERTS
+  LowCpuUsageAlarmBackendConsumerDataOpenInvoice:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-uat-reasac-ava-backend-consumer-data-open-invoice
+      AlarmDescription: Low CPU Alert - check invoice processing in uat
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-backend-consumer-data-open-invoice
+        - Name: ClusterName
+          Value: reasac-ava-uat
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:577595225843:AVA-UAT-ALERTS
+  LowCpuUsageAlarmIntSvcConsumersAccounting:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-uat-reasac-ava-int-svcs-consumers-accounting
+      AlarmDescription: Low CPU Alert - check invoice processing in uat
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-accounting
+        - Name: ClusterName
+          Value: reasac-ava-uat
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:577595225843:AVA-UAT-ALERTS
+  LowCpuUsageAlarmIntSvcConsumersAccountingInvoices:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-uat-reasac-ava-int-svcs-consumers-accounting-invoices
+      AlarmDescription: Low CPU Alert - check invoice processing in uat
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-accounting-invoices
+        - Name: ClusterName
+          Value: reasac-ava-uat
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:577595225843:AVA-UAT-ALERTS
+  LowCpuUsageAlarmIntSvcConsumersAccountingEvents:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-uat-reasac-ava-int-svcs-consumers-accounting-events
+      AlarmDescription: Low CPU Alert - check invoice processing in uat
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-accounting-events
+        - Name: ClusterName
+          Value: reasac-ava-uat
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:577595225843:AVA-UAT-ALERTS
+  LowCpuUsageAlarmIntSvcConsumersBanking:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-uat-reasac-ava-int-svcs-consumers-banking
+      AlarmDescription: Low CPU Alert - check invoice processing in uat
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-banking
+        - Name: ClusterName
+          Value: reasac-ava-uat
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:577595225843:AVA-UAT-ALERTS

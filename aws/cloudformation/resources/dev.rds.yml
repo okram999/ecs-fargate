@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "SQL server database for AV 2.0"
+Parameters:
+  VpcId:
+    Type: String
+    Description: "Id of the VPC to use"
+  DBName:
+    Type: String
+    Description: "Database name"
+  DBSubnetGroupName:
+    Type: String
+    Description: "Name of db subnet group"
+Resources:
+  PMASDBSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: "Security Group for access to SQL Server RDS instance"
+      VpcId: !Ref VpcId
+      GroupName: "pm-as-sqlsg-dev"
+      SecurityGroupIngress:
+        - FromPort: '1433'
+          IpProtocol: tcp
+          ToPort: '1433'
+          CidrIp: 10.0.0.0/8
+  SQLDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      BackupRetentionPeriod: 7
+      DeletionProtection: True
+      DBSubnetGroupName: !Ref DBSubnetGroupName
+      DBInstanceIdentifier: !Ref DBName
+      AllocatedStorage: '100'
+      DBInstanceClass: db.m4.xlarge
+      Engine: sqlserver-ee
+      EngineVersion: 14.00.3049.1.v1
+      AutoMinorVersionUpgrade: True
+      LicenseModel: license-included
+      PubliclyAccessible: false
+      StorageType: gp2
+      StorageEncrypted: true
+      MasterUsername: 'pmassetviewuser'
+      MasterUserPassword: 's%Adpf>_\B=4Q5wB'  #  -- &b^hKL4y%Wxwm{qw old password
+      DBParameterGroupName: pm-assetview-sql-14-paramgrp-nonprod
+      VPCSecurityGroups:
+        - !Ref PMASDBSecurityGroup

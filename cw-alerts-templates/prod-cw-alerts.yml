@@ -1,0 +1,143 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AVA Applications cw alerts
+Resources:
+  LowCpuUsageAlarmBackendConsumerEvnts:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-prod-reasac-ava-backend-consumer-events
+      AlarmDescription: Low CPU Alert - check invoice processing in prod
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-backend-consumer-events
+        - Name: ClusterName
+          Value: reasac-ava-prod
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:335945266965:AVA-Prod-Alerts
+  LowCpuUsageAlarmBackendConsumerData:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-prod-reasac-ava-backend-consumer-data
+      AlarmDescription: Low CPU Alert - check invoice processing in prod
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-backend-consumer-data
+        - Name: ClusterName
+          Value: reasac-ava-prod
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:335945266965:AVA-Prod-Alerts
+  LowCpuUsageAlarmBackendConsumerDataOpenInvoice:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-prod-reasac-ava-backend-consumer-data-open-invoice
+      AlarmDescription: Low CPU Alert - check invoice processing in prod
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-backend-consumer-data-open-invoice
+        - Name: ClusterName
+          Value: reasac-ava-prod
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:335945266965:AVA-Prod-Alerts
+  LowCpuUsageAlarmIntSvcConsumersAccounting:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-prod-reasac-ava-int-svcs-consumers-accounting
+      AlarmDescription: Low CPU Alert - check invoice processing in prod
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-accounting
+        - Name: ClusterName
+          Value: reasac-ava-prod
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:335945266965:AVA-Prod-Alerts
+  LowCpuUsageAlarmIntSvcConsumersAccountingInvoices:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-prod-reasac-ava-int-svcs-consumers-accounting-invoices
+      AlarmDescription: Low CPU Alert - check invoice processing in prod
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-accounting-invoices
+        - Name: ClusterName
+          Value: reasac-ava-prod
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:335945266965:AVA-Prod-Alerts
+  LowCpuUsageAlarmIntSvcConsumersAccountingEvents:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-prod-reasac-ava-int-svcs-consumers-accounting-events
+      AlarmDescription: Low CPU Alert - check invoice processing in prod
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-accounting-events
+        - Name: ClusterName
+          Value: reasac-ava-prod
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:335945266965:AVA-Prod-Alerts
+  LowCpuUsageAlarmIntSvcConsumersBanking:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: VeryLowCPU-prod-reasac-ava-int-svcs-consumers-banking
+      AlarmDescription: Low CPU Alert - check invoice processing in prod
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: reasac-ava-int-svcs-consumers-banking
+        - Name: ClusterName
+          Value: reasac-ava-prod
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 12
+      Threshold: 0.3
+      ComparisonOperator: LessThanOrEqualToThreshold
+      Unit: Percent
+      AlarmActions: 
+        - arn:aws:sns:us-east-1:335945266965:AVA-Prod-Alerts

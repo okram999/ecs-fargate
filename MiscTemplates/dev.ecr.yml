@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "ECR repositories for AssetView 2.0"
+Resources:
+  WebUIEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-webui-app
+  PropertyEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-property-app
+  ContactEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-contact-app
+  DocumentEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-document-app
+  CriticaldateEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-criticaldate-app
+  SharedEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-shared-app
+  AdminEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-admin-app
+  BcpEcr:
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: pm-av-bcp-app
+
+Outputs:    
+  WebUiEcrArn:
+    Value: !GetAtt WebUIEcr.Arn
+  PropertyEcrArn:
+    Value: !GetAtt PropertyEcr.Arn

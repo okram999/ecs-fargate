@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Main CloudFormation Stack for the AVA application"
+Parameters:
+  VpcId:
+    Type: String
+    Description: "Id of the VPC to use"
+  ECSTemplate:
+    Type: String
+    Description: "Location of the template used to create ECS Cluster components"
+  ECSClusterName:
+    Type: String
+    Description: "Cluster Name"
+  PMAssetViewWebUI:
+    Type: String
+    Description: "AV 2.0 WebUI docker image URI"
+  PMAssetViewProperty:
+    Type: String
+    Description: "AV 2.0 property docker image URI"
+  PMAssetViewContact:
+    Type: String
+    Description: "AV 2.0 contact docker image URI"
+  PMAssetViewDocument:
+    Type: String
+    Description: "AV 2.0 document docker Image"
+  PMAssetViewCriticalDate:
+    Type: String
+    Description: "AV 2.0 critical date docker Image"
+  PMAssetViewShared:
+    Type: String
+    Description: "AV 2.0 shared docker Image"
+  PMAssetViewAdmin:
+    Type: String
+    Description: "AV 2.0 admin docker Image"
+  PMAssetViewBcp:
+    Type: String
+    Description: "AV 2.0 admin docker Image"
+  Nginx:
+    Type: String
+    Description: "AV 2.0 admin docker Image"
+  RDSTemplate:
+    Type: String
+    Description: "Location of the template used to create all RDS related resources"
+  LogGroupName:
+    Type: String
+    Description: Log Group name for API
+  TaskDefinitionExecutionRoleARN:
+    Type: String
+    Description: Task Definition
+  SubnetIds:
+    Type: CommaDelimitedList
+    Description: Select at two public subnets in your selected VPC.
+  PublicSubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Select atleast two public subnets in your selected VPC for the ALB.
+  DBSubnetGroupName: 
+    Type: String
+    Description: Database Subnet group name, need to look it up
+  DBName:
+    Type: String
+    Description: "Database name"
+  SslCert:
+    Type: String
+    Description: SSL Cert for HTTPS listener
+Resources:
+  ECSStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Ref ECSTemplate
+      Parameters:
+        VpcId: !Ref VpcId
+        ECSClusterName: !Ref ECSClusterName
+        TaskDefinitionExecutionRoleARN: !Ref TaskDefinitionExecutionRoleARN
+        PMAssetViewWebUI: !Ref PMAssetViewWebUI
+        PMAssetViewProperty: !Ref PMAssetViewProperty
+        PMAssetViewContact: !Ref PMAssetViewContact
+        PMAssetViewDocument: !Ref PMAssetViewDocument
+        PMAssetViewCriticalDate: !Ref PMAssetViewCriticalDate
+        PMAssetViewShared: !Ref PMAssetViewShared
+        PMAssetViewAdmin: !Ref PMAssetViewAdmin
+        PMAssetViewBcp: !Ref PMAssetViewBcp
+        Nginx: !Ref Nginx
+        SubnetIds: !Join [",", [!Select [0, !Ref SubnetIds], !Select [1, !Ref SubnetIds], !Select [2, !Ref SubnetIds]]]
+        PublicSubnetIds: !Join [",", [!Select [0, !Ref PublicSubnetIds], !Select [1, !Ref PublicSubnetIds], !Select [2, !Ref PublicSubnetIds]]]
+        LogGroupName: !Ref LogGroupName
+        SslCert: !Ref SslCert
+  RDSStack:
+   Type: "AWS::CloudFormation::Stack"
+   Properties:
+     TemplateURL: !Ref RDSTemplate
+     Parameters:
+       VpcId: !Ref VpcId
+       DBSubnetGroupName: !Ref DBSubnetGroupName
+       DBName: !Ref DBName
