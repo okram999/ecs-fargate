@@ -1,5 +1,5 @@
 
-ENV=qa
+ENV=dev
 STACK_NAME=pm-av-$(ENV)
 PROFILE=default #use for prod
 GLOBAL_STACK_NAME=pm-av-$(ENV)

@@ -13,6 +13,13 @@ Parameters:
   Environment:
     Type: String
     Description: "Environment for the stack"
+  Environment:
+    Type: String
+    Description: "Environment for the stack"
+
+Conditions: 
+  CreateProdResources: !Equals [!Ref Environment, prod]
+
 Resources:
   PMASDBSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -25,24 +32,26 @@ Resources:
           IpProtocol: tcp
           ToPort: '1433'
           CidrIp: 10.0.0.0/8
-  # SQLDB:
-  #   Type: AWS::RDS::DBInstance
-  #   Properties:
-  #     BackupRetentionPeriod: 7
-  #     DeletionProtection: True
-  #     DBSubnetGroupName: !Ref DBSubnetGroupName
-  #     DBInstanceIdentifier: !Join [ '-', [!Ref DBName, !Ref Environment] ]
-  #     AllocatedStorage: '100'
-  #     DBInstanceClass: db.m4.xlarge
-  #     Engine: sqlserver-ee
-  #     EngineVersion: 14.00.3049.1.v1
-  #     AutoMinorVersionUpgrade: True
-  #     LicenseModel: license-included
-  #     PubliclyAccessible: false
-  #     StorageType: gp2
-  #     StorageEncrypted: true
-  #     MasterUsername: 'pmassetviewuser'
-  #     MasterUserPassword: 's%Adpf>_\B=4Q5wB'  #  -- &b^hKL4y%Wxwm{qw old password
-  #     DBParameterGroupName: pm-assetview-sql-14-paramgrp-nonprod
-  #     VPCSecurityGroups:
-  #       - !Ref PMASDBSecurityGroup
+  SQLDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      BackupRetentionPeriod: 7
+      DeletionProtection: True
+      DBSubnetGroupName: !Ref DBSubnetGroupName
+      DBInstanceIdentifier: !Join [ '-', [!Ref DBName, !Ref Environment] ]
+      AllocatedStorage: '100'
+      DBInstanceClass: !If [CreateProdResources, db.m4.xlarge,  db.m4.2xlarge]
+      Engine: sqlserver-ee
+      EngineVersion: 14.00.3049.1.v1
+      AutoMinorVersionUpgrade: True
+      LicenseModel: license-included
+      PubliclyAccessible: false
+      StorageType: !If [CreateProdResources, io1, gp2]
+      Iops: !If [CreateProdResources, 1000, !Ref "AWS::NoValue"]
+      MultiAZ: !If [CreateProdResources, True, !Ref "AWS::NoValue"]
+      StorageEncrypted: true
+      MasterUsername: 'pmuser'
+      MasterUserPassword: '\WKDbf*(z`Y5tW)D'
+      # DBParameterGroupName: pm-assetview-sql-14-paramgrp-nonprod
+      VPCSecurityGroups:
+        - !Ref PMASDBSecurityGroup

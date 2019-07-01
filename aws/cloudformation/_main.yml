@@ -55,7 +55,7 @@ Resources:
         Environment: !Ref Environment
 
   ECSStack:
-    DependsOn: IAMStack
+    # DependsOn: IAMStack
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Ref ECSTemplate
