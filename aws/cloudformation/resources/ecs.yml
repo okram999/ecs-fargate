@@ -66,7 +66,7 @@ Resources:
     Properties:
       HealthCheckIntervalSeconds: 10
       HealthCheckPath: /   # check for AV2.0 specific endpoint for the health check
-      HealthCheckProtocol: HTTPS
+      HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       Name: !Join [ '-', [ pm-av-webui-tg, !Ref Environment] ]
@@ -82,7 +82,7 @@ Resources:
     Properties:
       HealthCheckIntervalSeconds: 10
       HealthCheckPath: /     # check for AV2.0 specific endpoint for the health check
-      HealthCheckProtocol: HTTPS
+      HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       Name: !Join [ '-', [ pm-av-property-tg, !Ref Environment] ]
