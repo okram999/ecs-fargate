@@ -16,18 +16,6 @@
         "Value": "REAS-Sentinel"
     },
     {
-        "Key": "FMC",
-        "Value": "411407"
-    },
-    {
-        "Key": "BillingApprover",
-        "Value": "Steve.Yi@cbre.com"
-    },
-    {
-        "Key": "SupportGroup",
-        "Value": "Giri.Sripati@cbre.com"
-    },
-    {
         "Key": "Environment",
         "Value": "qa"
     }
