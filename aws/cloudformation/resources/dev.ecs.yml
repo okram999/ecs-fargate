@@ -7,33 +7,12 @@ Parameters:
   ECSClusterName:
     Type: String
     Description: "Name of the ECS Cluster"
-  TaskDefinitionExecutionRoleARN:
-    Type: String
-    Description: Task Definition Execution Role ARN
   PMAssetViewWebUI:
     Type: String
     Description: "Backend Consumer Data image URI"
   PMAssetViewProperty:
     Type: String
     Description: "Backend Consumer Event image URI"
-  PMAssetViewContact:
-    Type: String
-    Description: "Backend Consumer Event image URI"
-  PMAssetViewDocument:
-    Type: String
-    Description: "MRI Open Invoice image URI"
-  PMAssetViewCriticalDate:
-    Type: String
-    Description: "MRI GL Balance image URI"
-  PMAssetViewShared:
-    Type: String
-    Description: "central station image URI"
-  PMAssetViewAdmin:
-    Type: String
-    Description: "frontend app image URI"
-  PMAssetViewBcp:
-    Type: String
-    Description: "frontend app image URI"
   Nginx:
     Type: String
     Description: "frontend app image URI"
@@ -46,9 +25,9 @@ Parameters:
   LogGroupName:
     Type: String
     Description: Log Group Name for ECS Service
-  SslCert:
-    Type: String
-    Description: SSL Cert for HTTPS listener
+  # SslCert:
+  #   Type: String
+  #   Description: SSL Cert for HTTPS listener
 Resources:
   PMAVEcsSecurityGroup:   ## this need to allow HTTP and HTTPS traffic from 0.0.0.0/0
     Type: AWS::EC2::SecurityGroup
@@ -84,8 +63,8 @@ Resources:
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       Name: pm-av-webui-tg-dev
-      Port: 443  # will change with nginx implementation
-      Protocol: HTTPS
+      Port: 80  # will change with nginx implementation
+      Protocol: HTTP
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VpcId'
       TargetType: ip
@@ -100,128 +79,33 @@ Resources:
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       Name: pm-av-property-tg-dev
-      Port: 443
-      Protocol: HTTPS
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VpcId'
-      TargetType: ip
-
-  PMAVContactTG:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: PMAVALoadBalancer
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTPS
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      Name: pm-av-contact-tg-dev
-      Port: 443
-      Protocol: HTTPS
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VpcId'
-      TargetType: ip
-
-  PMAVDocumentTG:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: PMAVALoadBalancer
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /   # check for AV2.0 specific endpoint for the health check
-      HealthCheckProtocol: HTTPS
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      Name: pm-av-document-tg-dev
-      Port: 443
-      Protocol: HTTPS
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VpcId'
-      TargetType: ip
-
-  PMAVCriticalDateTG:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: PMAVALoadBalancer
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /   # check for AV2.0 specific endpoint for the health check
-      HealthCheckProtocol: HTTPS
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      Name: pm-av-criticaldate-tg-dev
-      Port: 443
-      Protocol: HTTPS
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VpcId'
-      TargetType: ip
-
-  PMAVSharedTG:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: PMAVALoadBalancer
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTPS
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      Name: pm-av-shared-tg-dev
-      Port: 443
-      Protocol: HTTPS
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VpcId'
-      TargetType: ip
-
-  PMAVAdminTG:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: PMAVALoadBalancer
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTPS
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      Name: pm-av-admin-tg-dev
-      Port: 443
-      Protocol: HTTPS
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VpcId'
-      TargetType: ip
-
-  PMAVBcpTG:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: PMAVALoadBalancer
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTPS
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      Name: pm-av-bcp-tg-dev
-      Port: 443
-      Protocol: HTTPS
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VpcId'
-      TargetType: ip
-
-#ALB Listeners
-  PMAVALoadBalancerHTTPListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    DependsOn:
-      - PMAVALoadBalancer
-    Properties:
-      DefaultActions:
-        - RedirectConfig:
-            Host: "#{host}"
-            Path: "/#{path}"
-            Port: 443
-            Protocol: "HTTPS"
-            Query: "#{query}"
-            StatusCode: HTTP_301
-          Type: redirect
-      LoadBalancerArn: !Ref 'PMAVALoadBalancer'
-      Port: '80'
+      Port: 80
       Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VpcId'
+      TargetType: ip
 
-  PMAVALoadBalancerHTTPSListener:
+ 
+#ALB Listeners
+  # PMAVALoadBalancerHTTPListener:
+  #   Type: AWS::ElasticLoadBalancingV2::Listener
+  #   DependsOn:
+  #     - PMAVALoadBalancer
+  #   Properties:
+  #     DefaultActions:
+  #       - RedirectConfig:
+  #           Host: "#{host}"
+  #           Path: "/#{path}"
+  #           Port: 443
+  #           Protocol: "HTTPS"
+  #           Query: "#{query}"
+  #           StatusCode: HTTP_301
+  #         Type: redirect
+  #     LoadBalancerArn: !Ref 'PMAVALoadBalancer'
+  #     Port: '80'
+  #     Protocol: HTTP
+
+  PMAVALoadBalancerHTTPListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     DependsOn:
       - PMAVALoadBalancer
@@ -230,14 +114,14 @@ Resources:
         - TargetGroupArn: !Ref 'PMAVWebUITG'
           Type: forward
       LoadBalancerArn: !Ref 'PMAVALoadBalancer'
-      Port: '443'
-      Protocol: HTTPS
-      Certificates:
-        - CertificateArn: !Ref 'SslCert'
+      Port: '80'
+      Protocol: HTTP
+      # Certificates:
+      #   - CertificateArn: !Ref 'SslCert'
 
   PMAVWebUILoadBalancerListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
+    DependsOn: PMAVALoadBalancerHTTPListener
     Properties:
       Actions:
       - TargetGroupArn: !Ref 'PMAVWebUITG'
@@ -246,12 +130,12 @@ Resources:
         - Field: host-header
           Values:
             - propertypulse-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
+      ListenerArn: !Ref 'PMAVALoadBalancerHTTPListener'
       Priority: 1
 
   PMAVPropertyLoadBalancerListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
+    DependsOn: PMAVALoadBalancerHTTPListener
     Properties:
       Actions:
       - TargetGroupArn: !Ref 'PMAVPropertyTG'
@@ -260,88 +144,8 @@ Resources:
         - Field: host-header
           Values:
             - propertypulse-property-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
+      ListenerArn: !Ref 'PMAVALoadBalancerHTTPListener'
       Priority: 2
-  PMAVContactLoadBalancerListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Actions:
-      - TargetGroupArn: !Ref 'PMAVContactTG'
-        Type: forward
-      Conditions:
-        - Field: host-header
-          Values:
-            - propertypulse-contact-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
-      Priority: 3
-      
-  PMAVDocumentLoadBalancerListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Actions:
-      - TargetGroupArn: !Ref 'PMAVDocumentTG'
-        Type: forward
-      Conditions:
-        - Field: host-header
-          Values:
-            - propertypulse-document-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
-      Priority: 4
-
-  PMAVCriticalDatesLoadBalancerListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Actions:
-      - TargetGroupArn: !Ref 'PMAVCriticalDateTG'
-        Type: forward
-      Conditions:
-        - Field: host-header
-          Values:
-            - propertypulse-criticaldate-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
-      Priority: 5
-  PMAVSharedLoadBalancerListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Actions:
-      - TargetGroupArn: !Ref 'PMAVSharedTG'
-        Type: forward
-      Conditions:
-        - Field: host-header
-          Values:
-            - propertypulse-shared-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
-      Priority: 6
-  PMAVAdminLoadBalancerListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Actions:
-      - TargetGroupArn: !Ref 'PMAVAdminTG'
-        Type: forward
-      Conditions:
-        - Field: host-header
-          Values:
-            - propertypulse-admin-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
-      Priority: 7
-  PMAVBcpLoadBalancerListenerRule:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Actions:
-      - TargetGroupArn: !Ref 'PMAVBcpTG'
-        Type: forward
-      Conditions:
-        - Field: host-header
-          Values:
-            - propertypulse-bcp-dev.cbre.com
-      ListenerArn: !Ref 'PMAVALoadBalancerHTTPSListener'
-      Priority: 8
 
 
   PMAVALoadBalancer:
@@ -373,7 +177,7 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
+      ExecutionRoleArn: !ImportValue 'AssetviewECSRole'
       ContainerDefinitions:
         - Name: 'pm-av-webui-app'
           LogConfiguration:
@@ -385,11 +189,11 @@ Resources:
           Image: !Ref PMAssetViewWebUI
           Essential: 'true'
           PortMappings:
-          - ContainerPort: 443 #80
+          - ContainerPort: 80
 
   PMASWebUIApp:
     Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
+    DependsOn: PMAVALoadBalancerHTTPListener
     Properties:
       Cluster: !Ref PMAVDev
       DeploymentConfiguration:
@@ -397,9 +201,9 @@ Resources:
         MinimumHealthyPercent: 100
       LoadBalancers:
       - ContainerName: pm-av-webui-app
-        ContainerPort: 443 #80
+        ContainerPort: 80
         TargetGroupArn: !Ref 'PMAVWebUITG'
-      DesiredCount: 1
+      DesiredCount: 0
       LaunchType: FARGATE
       ServiceName: 'pm-av-webui-app'
       NetworkConfiguration:
@@ -410,275 +214,6 @@ Resources:
           AssignPublicIp: DISABLED
       TaskDefinition: !Ref PMASWebUIAppTaskDefinition
 
-  PMASContactTaskDefinition:
-    Type: 'AWS::ECS::TaskDefinition'
-    Properties:
-      Cpu: '512'
-      Memory: '1024'
-      RequiresCompatibilities:
-        - FARGATE
-      NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
-      ContainerDefinitions:
-        - Name: 'pm-av-contact-nginx'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref Nginx
-          Essential: 'true'
-          PortMappings:
-          - ContainerPort: 443
-        - Name: 'pm-av-contact-app'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewContact
-          Essential: 'true'
-
-  PMASContactApp:
-    Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Cluster: !Ref PMAVDev
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 100
-      LoadBalancers:
-      - ContainerName: pm-av-contact-nginx
-        ContainerPort: 443
-        TargetGroupArn: !Ref 'PMAVContactTG'
-      DesiredCount: 1
-      LaunchType: FARGATE
-      ServiceName: 'pm-av-contact-app'
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          SecurityGroups:
-            - !Ref 'PMAVEcsSecurityGroup'
-          Subnets: !Ref 'SubnetIds'
-          AssignPublicIp: DISABLED
-      TaskDefinition: !Ref PMASContactTaskDefinition
-
-  PMASBcpTaskDefinition:
-    Type: 'AWS::ECS::TaskDefinition'
-    Properties:
-      Cpu: '512'
-      Memory: '1024'
-      RequiresCompatibilities:
-        - FARGATE
-      NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
-      ContainerDefinitions:
-        - Name: 'pm-av-bcp-nginx'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref Nginx
-          Essential: 'true'
-          PortMappings:
-          - ContainerPort: 443
-        - Name: 'pm-av-bcp-app'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewBcp
-          Essential: 'true'
-
-  PMASBcpApp:
-    Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Cluster: !Ref PMAVDev
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 100
-      LoadBalancers:
-      - ContainerName: pm-av-bcp-nginx
-        ContainerPort: 443
-        TargetGroupArn: !Ref 'PMAVBcpTG'
-      DesiredCount: 1
-      LaunchType: FARGATE
-      ServiceName: 'pm-av-bcp-app'
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          SecurityGroups:
-            - !Ref 'PMAVEcsSecurityGroup'
-          Subnets: !Ref 'SubnetIds'
-          AssignPublicIp: DISABLED
-      TaskDefinition: !Ref PMASBcpTaskDefinition
-
-  PMASAdminTaskDefinition:
-    Type: 'AWS::ECS::TaskDefinition'
-    Properties:
-      Cpu: '512'
-      Memory: '1024'
-      RequiresCompatibilities:
-        - FARGATE
-      NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
-      ContainerDefinitions:
-        - Name: 'pm-av-admin-nginx'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref Nginx
-          Essential: 'true'
-          PortMappings:
-          - ContainerPort: 443
-        - Name: 'pm-av-admin-app'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewAdmin
-          Essential: 'true'
-
-  PMASAdminApp:
-    Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Cluster: !Ref PMAVDev
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 100
-      LoadBalancers:
-      - ContainerName: pm-av-admin-nginx
-        ContainerPort: 443
-        TargetGroupArn: !Ref 'PMAVAdminTG'
-      DesiredCount: 1
-      LaunchType: FARGATE
-      ServiceName: 'pm-av-admin-app'
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          SecurityGroups:
-            - !Ref 'PMAVEcsSecurityGroup'
-          Subnets: !Ref 'SubnetIds'
-          AssignPublicIp: DISABLED
-      TaskDefinition: !Ref PMASAdminTaskDefinition
-
-  PMASCriticaldateTaskDefinition:
-    Type: 'AWS::ECS::TaskDefinition'
-    Properties:
-      Cpu: '512'
-      Memory: '1024'
-      RequiresCompatibilities:
-        - FARGATE
-      NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
-      ContainerDefinitions:
-        - Name: 'pm-av-criticaldate-nginx'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref Nginx
-          Essential: 'true'
-          PortMappings:
-          - ContainerPort: 443
-        - Name: 'pm-av-criticaldate-app'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewCriticalDate
-          Essential: 'true'
-
-  PMASCriticalDateApp:
-    Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Cluster: !Ref PMAVDev
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 100
-      LoadBalancers:
-      - ContainerName: pm-av-criticaldate-nginx
-        ContainerPort: 443
-        TargetGroupArn: !Ref 'PMAVCriticalDateTG'
-      DesiredCount: 1
-      LaunchType: FARGATE
-      ServiceName: 'pm-av-criticaldate-app'
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          SecurityGroups:
-            - !Ref 'PMAVEcsSecurityGroup'
-          Subnets: !Ref 'SubnetIds'
-          AssignPublicIp: DISABLED
-      TaskDefinition: !Ref PMASCriticaldateTaskDefinition
-
-  PMASdocumentTaskDefinition:
-    Type: 'AWS::ECS::TaskDefinition'
-    Properties:
-      Cpu: '512'
-      Memory: '1024'
-      RequiresCompatibilities:
-        - FARGATE
-      NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
-      ContainerDefinitions:
-        - Name: 'pm-av-document-nginx'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref Nginx
-          Essential: 'true'
-          PortMappings:
-          - ContainerPort: 443        
-        - Name: 'pm-av-document-app'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewDocument
-          Essential: 'true'
-
-  PMASDocumentApp:
-    Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Cluster: !Ref PMAVDev
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 100
-      LoadBalancers:
-      - ContainerName: pm-av-document-nginx
-        ContainerPort: 443
-        TargetGroupArn: !Ref PMAVDocumentTG
-      DesiredCount: 0
-      LaunchType: FARGATE
-      ServiceName: 'pm-av-document-app'
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          SecurityGroups:
-            - !Ref 'PMAVEcsSecurityGroup'
-          Subnets: !Ref 'SubnetIds'
-          AssignPublicIp: DISABLED
-      TaskDefinition: !Ref PMASdocumentTaskDefinition
 
   PMASPropertyTaskDefinition:
     Type: 'AWS::ECS::TaskDefinition'
@@ -688,7 +223,7 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
+      ExecutionRoleArn: !ImportValue 'AssetviewECSRole'
       ContainerDefinitions:
         - Name: 'pm-av-property-nginx'
           LogConfiguration:
@@ -700,7 +235,7 @@ Resources:
           Image: !Ref Nginx
           Essential: 'true'
           PortMappings:
-          - ContainerPort: 443
+          - ContainerPort: 80
         - Name: 'pm-av-property-app'
           LogConfiguration:
             LogDriver: awslogs
@@ -713,7 +248,7 @@ Resources:
 
   PMASPropertyApp:
     Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
+    DependsOn: PMAVALoadBalancerHTTPListener
     Properties:
       Cluster: !Ref PMAVDev
       DeploymentConfiguration:
@@ -721,9 +256,9 @@ Resources:
         MinimumHealthyPercent: 100
       LoadBalancers:
       - ContainerName: pm-av-property-nginx
-        ContainerPort: 443
+        ContainerPort: 80
         TargetGroupArn: !Ref PMAVPropertyTG
-      DesiredCount: 1
+      DesiredCount: 0
       LaunchType: FARGATE
       ServiceName: 'pm-av-property-app'
       NetworkConfiguration:
@@ -733,57 +268,3 @@ Resources:
           Subnets: !Ref 'SubnetIds'
           AssignPublicIp: DISABLED
       TaskDefinition: !Ref PMASPropertyTaskDefinition
-
-  PMASSharedTaskDefinition:
-    Type: 'AWS::ECS::TaskDefinition'
-    Properties:
-      Cpu: '512'
-      Memory: '1024'
-      RequiresCompatibilities:
-        - FARGATE
-      NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
-      ContainerDefinitions:
-        - Name: 'pm-av-shared-nginx'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref Nginx
-          Essential: 'true'
-          PortMappings:
-          - ContainerPort: 443
-        - Name: 'pm-av-shared-app'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              'awslogs-region': !Ref 'AWS::Region'
-              'awslogs-group': !Ref LogGroup
-              'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewShared
-          Essential: 'true'
-
-  PMASSharedApp:
-    Type: "AWS::ECS::Service"
-    DependsOn: PMAVALoadBalancerHTTPSListener
-    Properties:
-      Cluster: !Ref PMAVDev
-      DeploymentConfiguration:
-        MaximumPercent: 200
-        MinimumHealthyPercent: 100
-      LoadBalancers:
-      - ContainerName: pm-av-shared-nginx
-        ContainerPort: 443
-        TargetGroupArn: !Ref PMAVSharedTG
-      DesiredCount: 1
-      LaunchType: FARGATE
-      ServiceName: 'pm-av-shared-app'
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          SecurityGroups:
-            - !Ref 'PMAVEcsSecurityGroup'
-          Subnets: !Ref 'SubnetIds'
-          AssignPublicIp: DISABLED
-      TaskDefinition: !Ref PMASSharedTaskDefinition

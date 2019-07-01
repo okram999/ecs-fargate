@@ -1,55 +1,39 @@
 [
     {
+        "ParameterKey": "Environment",
+        "ParameterValue": "DEV"
+    },    
+    {
         "ParameterKey": "VpcId",
-        "ParameterValue": "vpc-06be58ee957419017"
+        "ParameterValue": "vpc-08ee27c083dcc228b"
     },
     {
         "ParameterKey": "ECSTemplate",
-        "ParameterValue": "https://s3.amazonaws.com/pm-av-templates-us-east-1-dev/cloudformation/dev/ecs.yml"
+        "ParameterValue": "https://s3.amazonaws.com/pm-templates-us-east-1-dev/cloudformation/dev/ecs.yml"
     },
     {
         "ParameterKey": "RDSTemplate",
-        "ParameterValue": "https://s3.amazonaws.com/pm-av-templates-us-east-1-dev/cloudformation/dev/rds.yml"
+        "ParameterValue": "https://s3.amazonaws.com/pm-templates-us-east-1-dev/cloudformation/dev/rds.yml"
     },
+    {
+        "ParameterKey": "IAMTemplate",
+        "ParameterValue": "https://s3.amazonaws.com/pm-templates-us-east-1-dev/cloudformation/dev/iam.yml"
+    },    
     {
         "ParameterKey": "ECSClusterName",
         "ParameterValue": "pm-av-dev"
     },
     {
         "ParameterKey": "PMAssetViewWebUI",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-webui-app:dev"
+        "ParameterValue": "874311019960.dkr.ecr.us-east-1.amazonaws.com/nginx-poc:dev"
     },
     {
         "ParameterKey": "PMAssetViewProperty",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-property-app:dev"
-    },
-    {
-        "ParameterKey": "PMAssetViewContact",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-contact-app:dev"
-    },
-    {
-        "ParameterKey": "PMAssetViewDocument",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-document-app:dev"
-    },
-    {
-        "ParameterKey": "PMAssetViewCriticalDate",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-criticaldate-app:dev"
-    },
-    {
-        "ParameterKey": "PMAssetViewShared",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-shared-app:dev"
-    },
-    {
-        "ParameterKey": "PMAssetViewAdmin",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-admin-app:dev"
-    },
-    {
-        "ParameterKey": "PMAssetViewBcp",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-bcp-app:dev"
+        "ParameterValue": "874311019960.dkr.ecr.us-east-1.amazonaws.com/nginx-poc:dev"
     },
     {
         "ParameterKey": "Nginx",
-        "ParameterValue": "577595225843.dkr.ecr.us-east-1.amazonaws.com/pm-av-nginx-svc:dev"
+        "ParameterValue": "874311019960.dkr.ecr.us-east-1.amazonaws.com/nginx-poc:dev"
     },
     {
         "ParameterKey": "LogGroupName",
@@ -57,26 +41,18 @@
     },
     {
         "ParameterKey": "PublicSubnetIds",
-        "ParameterValue": "subnet-06743e93fa58da88b,subnet-0714ddf7cb5c2f6b6,subnet-07fcf0c505297e76e"
+        "ParameterValue": "subnet-071854fb259b2a836,subnet-05db2307792dc4d8c"
     },
     {
         "ParameterKey": "SubnetIds",
-        "ParameterValue": "subnet-03bd810594f7d3796,subnet-052700eded8c919ab,subnet-0f84e1f7be57c868a"
-    },
-    {
-        "ParameterKey": "TaskDefinitionExecutionRoleARN",
-        "ParameterValue": "arn:aws:iam::577595225843:role/pm-assetview-ecstaskrole-nonprod"
+        "ParameterValue": "subnet-085b2747bf8df7b81,subnet-0ccb72e07f1c2bef4"
     },
     {
         "ParameterKey": "DBSubnetGroupName",
-        "ParameterValue": "pm-assetview-db-subnetgrp-nonprod"
+        "ParameterValue": "test-subnetgrp"
     },
     {
         "ParameterKey": "DBName",
         "ParameterValue": "pm-av-database-dev"
-    },
-    {
-        "ParameterKey": "SslCert",
-        "ParameterValue": " arn:aws:acm:us-east-1:577595225843:certificate/edc7c4d7-4704-46b6-bdf5-c207852a9d3e"
     }
 ]

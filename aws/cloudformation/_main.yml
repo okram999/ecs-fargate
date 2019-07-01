@@ -7,6 +7,9 @@ Parameters:
   ECSTemplate:
     Type: String
     Description: "Location of the template used to create ECS Cluster components"
+  IAMTemplate:
+    Type: String
+    Description: "Location of the template used to create ECS Cluster components"
   ECSClusterName:
     Type: String
     Description: "Cluster Name"
@@ -16,24 +19,6 @@ Parameters:
   PMAssetViewProperty:
     Type: String
     Description: "AV 2.0 property docker image URI"
-  PMAssetViewContact:
-    Type: String
-    Description: "AV 2.0 contact docker image URI"
-  PMAssetViewDocument:
-    Type: String
-    Description: "AV 2.0 document docker Image"
-  PMAssetViewCriticalDate:
-    Type: String
-    Description: "AV 2.0 critical date docker Image"
-  PMAssetViewShared:
-    Type: String
-    Description: "AV 2.0 shared docker Image"
-  PMAssetViewAdmin:
-    Type: String
-    Description: "AV 2.0 admin docker Image"
-  PMAssetViewBcp:
-    Type: String
-    Description: "AV 2.0 admin docker Image"
   Nginx:
     Type: String
     Description: "AV 2.0 admin docker Image"
@@ -43,9 +28,6 @@ Parameters:
   LogGroupName:
     Type: String
     Description: Log Group name for API
-  TaskDefinitionExecutionRoleARN:
-    Type: String
-    Description: Task Definition
   SubnetIds:
     Type: CommaDelimitedList
     Description: Select at two public subnets in your selected VPC.
@@ -58,31 +40,36 @@ Parameters:
   DBName:
     Type: String
     Description: "Database name"
-  SslCert:
+  Environment:
     Type: String
-    Description: SSL Cert for HTTPS listener
+    Description: "Environment for the stack"
+  # SslCert:
+  #   Type: String
+  #   Description: SSL Cert for HTTPS listener
 Resources:
+  IAMStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Ref IAMTemplate
+      Parameters:
+        Environment: !Ref Environment
+
   ECSStack:
+    DependsOn: IAMStack
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Ref ECSTemplate
       Parameters:
         VpcId: !Ref VpcId
         ECSClusterName: !Ref ECSClusterName
-        TaskDefinitionExecutionRoleARN: !Ref TaskDefinitionExecutionRoleARN
         PMAssetViewWebUI: !Ref PMAssetViewWebUI
         PMAssetViewProperty: !Ref PMAssetViewProperty
-        PMAssetViewContact: !Ref PMAssetViewContact
-        PMAssetViewDocument: !Ref PMAssetViewDocument
-        PMAssetViewCriticalDate: !Ref PMAssetViewCriticalDate
-        PMAssetViewShared: !Ref PMAssetViewShared
-        PMAssetViewAdmin: !Ref PMAssetViewAdmin
-        PMAssetViewBcp: !Ref PMAssetViewBcp
         Nginx: !Ref Nginx
-        SubnetIds: !Join [",", [!Select [0, !Ref SubnetIds], !Select [1, !Ref SubnetIds], !Select [2, !Ref SubnetIds]]]
-        PublicSubnetIds: !Join [",", [!Select [0, !Ref PublicSubnetIds], !Select [1, !Ref PublicSubnetIds], !Select [2, !Ref PublicSubnetIds]]]
+        SubnetIds: !Join [",", [!Select [0, !Ref SubnetIds], !Select [1, !Ref SubnetIds]]]
+        PublicSubnetIds: !Join [",", [!Select [0, !Ref PublicSubnetIds], !Select [1, !Ref PublicSubnetIds]]]
         LogGroupName: !Ref LogGroupName
-        SslCert: !Ref SslCert
+        # SslCert: !Ref SslCert
+
   RDSStack:
    Type: "AWS::CloudFormation::Stack"
    Properties:

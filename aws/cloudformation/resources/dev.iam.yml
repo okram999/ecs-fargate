@@ -1,9 +1,15 @@
 
 AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  Environment:
+    Type: String
+    Description: "Environment for the stack"
+    
 Resources:
   AVECSTaskRole:
     Type: "AWS::IAM::Role"
     Properties:
+      RoleName: !Join [ '-', [pm-av-ecsTaskrole, !Ref Environment] ]
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -39,3 +45,9 @@ Resources:
                     }
                 ]
             }
+Outputs:
+  AVECSTaskRole:
+    Value:
+      !GetAtt AVECSTaskRole.Arn
+    Export:
+      Name: AssetviewECSRole
