@@ -68,6 +68,7 @@ Resources:
         SubnetIds: !Join [",", [!Select [0, !Ref SubnetIds], !Select [1, !Ref SubnetIds]]]
         PublicSubnetIds: !Join [",", [!Select [0, !Ref PublicSubnetIds], !Select [1, !Ref PublicSubnetIds]]]
         LogGroupName: !Ref LogGroupName
+        Environment: !Ref Environment
         # SslCert: !Ref SslCert
 
   RDSStack:
@@ -78,3 +79,4 @@ Resources:
        VpcId: !Ref VpcId
        DBSubnetGroupName: !Ref DBSubnetGroupName
        DBName: !Ref DBName
+       Environment: !Ref Environment

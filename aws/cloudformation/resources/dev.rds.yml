@@ -10,6 +10,9 @@ Parameters:
   DBSubnetGroupName:
     Type: String
     Description: "Name of db subnet group"
+  Environment:
+    Type: String
+    Description: "Environment for the stack"
 Resources:
   PMASDBSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -28,7 +31,7 @@ Resources:
   #     BackupRetentionPeriod: 7
   #     DeletionProtection: True
   #     DBSubnetGroupName: !Ref DBSubnetGroupName
-  #     DBInstanceIdentifier: !Ref DBName
+  #     DBInstanceIdentifier: !Join [ '-', [!Ref DBName, !Ref Environment] ]
   #     AllocatedStorage: '100'
   #     DBInstanceClass: db.m4.xlarge
   #     Engine: sqlserver-ee

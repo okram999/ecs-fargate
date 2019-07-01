@@ -28,6 +28,10 @@ Parameters:
   # SslCert:
   #   Type: String
   #   Description: SSL Cert for HTTPS listener
+  Environment:
+    Type: String
+    Description: "Environment for the stack"
+
 Resources:
   PMAVEcsSecurityGroup:   ## this need to allow HTTP and HTTPS traffic from 0.0.0.0/0
     Type: AWS::EC2::SecurityGroup
@@ -62,7 +66,7 @@ Resources:
       HealthCheckProtocol: HTTPS
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
-      Name: pm-av-webui-tg-dev
+      Name: !Join [ '-', [ pm-av-webui-tg, !Ref Environment] ]
       Port: 80  # will change with nginx implementation
       Protocol: HTTP
       UnhealthyThresholdCount: 2
@@ -78,7 +82,7 @@ Resources:
       HealthCheckProtocol: HTTPS
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
-      Name: pm-av-property-tg-dev
+      Name: !Join [ '-', [ pm-av-property-tg, !Ref Environment] ]
       Port: 80
       Protocol: HTTP
       UnhealthyThresholdCount: 2
@@ -151,7 +155,7 @@ Resources:
   PMAVALoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: pm-assetview-alb-dev
+      Name: !Join [ '-', [ pm-assetview-alb, !Ref Environment ] ]
       Scheme: internet-facing
       LoadBalancerAttributes:
         - Key: idle_timeout.timeout_seconds
@@ -162,12 +166,13 @@ Resources:
   LogGroup: 
     Type: "AWS::Logs::LogGroup"
     Properties: 
-      LogGroupName: !Ref LogGroupName
+      LogGroupName: !Join [ '-', [!Ref LogGroupName, !Ref Environment] ]
       RetentionInDays: 7
-  PMAVDev:
+
+  ECSCLUSTER:
     Type: "AWS::ECS::Cluster"
     Properties:
-      ClusterName: !Ref ECSClusterName
+      ClusterName: !Join [ '-', [!Ref ECSClusterName, !Ref Environment] ]
               
   PMASWebUIAppTaskDefinition:
     Type: 'AWS::ECS::TaskDefinition'
@@ -186,7 +191,7 @@ Resources:
               'awslogs-region': !Ref 'AWS::Region'
               'awslogs-group': !Ref LogGroup
               'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewWebUI
+          Image: !Join [ ':', [!Ref PMAssetViewWebUI, !Ref Environment] ]
           Essential: 'true'
           PortMappings:
           - ContainerPort: 80
@@ -195,7 +200,7 @@ Resources:
     Type: "AWS::ECS::Service"
     DependsOn: PMAVALoadBalancerHTTPListener
     Properties:
-      Cluster: !Ref PMAVDev
+      Cluster: !Ref ECSCLUSTER
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 100
@@ -243,14 +248,14 @@ Resources:
               'awslogs-region': !Ref 'AWS::Region'
               'awslogs-group': !Ref LogGroup
               'awslogs-stream-prefix': !Ref 'AWS::StackName'
-          Image: !Ref PMAssetViewProperty
+          Image: !Join [ ':', [!Ref PMAssetViewProperty, !Ref Environment] ]
           Essential: 'true'
 
   PMASPropertyApp:
     Type: "AWS::ECS::Service"
     DependsOn: PMAVALoadBalancerHTTPListener
     Properties:
-      Cluster: !Ref PMAVDev
+      Cluster: !Ref ECSCLUSTER
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 100
