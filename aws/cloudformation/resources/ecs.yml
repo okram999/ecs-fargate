@@ -31,6 +31,9 @@ Parameters:
   Environment:
     Type: String
     Description: "Environment for the stack"
+  AVECSTaskRole:
+    Type: String
+    Description: "ECS task exec role"
 
 Resources:
   PMAVEcsSecurityGroup:   ## this need to allow HTTP and HTTPS traffic from 0.0.0.0/0
@@ -182,7 +185,7 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !ImportValue 'AssetviewECSRole'
+      ExecutionRoleArn: !Ref AVECSTaskRole
       ContainerDefinitions:
         - Name: 'pm-av-webui-app'
           LogConfiguration:
@@ -228,7 +231,7 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       NetworkMode: 'awsvpc'
-      ExecutionRoleArn: !ImportValue 'AssetviewECSRole'
+      ExecutionRoleArn: !Ref AVECSTaskRole
       ContainerDefinitions:
         - Name: 'pm-av-property-nginx'
           LogConfiguration:

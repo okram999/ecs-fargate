@@ -1,5 +1,5 @@
 
-ENV=dev
+ENV=qa
 STACK_NAME=pm-av-$(ENV)
 PROFILE=default #use for prod
 GLOBAL_STACK_NAME=pm-av-$(ENV)
@@ -8,9 +8,9 @@ REGION=us-east-1
 upload-env:
 	@aws s3api create-bucket --bucket pm-templates-us-east-1-$(ENV) --region us-east-1
 	@aws s3 cp _main.yml s3://pm-templates-us-east-1-$(ENV)/cloudformation/_main.yml
-	@aws s3 cp resources/$(ENV).iam.yml s3://pm-templates-us-east-1-$(ENV)/cloudformation/$(ENV)/iam.yml
-	@aws s3 cp resources/$(ENV).ecs.yml s3://pm-templates-us-east-1-$(ENV)/cloudformation/$(ENV)/ecs.yml
-	@aws s3 cp resources/$(ENV).rds.yml s3://pm-templates-us-east-1-$(ENV)/cloudformation/$(ENV)/rds.yml
+	@aws s3 cp resources/iam.yml s3://pm-templates-us-east-1-$(ENV)/cloudformation/$(ENV)/iam.yml
+	@aws s3 cp resources/ecs.yml s3://pm-templates-us-east-1-$(ENV)/cloudformation/$(ENV)/ecs.yml
+	@aws s3 cp resources/rds.yml s3://pm-templates-us-east-1-$(ENV)/cloudformation/$(ENV)/rds.yml
 
 
 create-env:

@@ -1,7 +1,7 @@
 [
     {
         "ParameterKey": "Environment",
-        "ParameterValue": "QA"
+        "ParameterValue": "qa"
     },    
     {
         "ParameterKey": "VpcId",

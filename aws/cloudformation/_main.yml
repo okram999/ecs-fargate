@@ -69,6 +69,7 @@ Resources:
         PublicSubnetIds: !Join [",", [!Select [0, !Ref PublicSubnetIds], !Select [1, !Ref PublicSubnetIds]]]
         LogGroupName: !Ref LogGroupName
         Environment: !Ref Environment
+        AVECSTaskRole: !GetAtt [ IAMStack , Outputs.AVECSTaskRole ]
         # SslCert: !Ref SslCert
 
   RDSStack:

@@ -49,5 +49,3 @@ Outputs:
   AVECSTaskRole:
     Value:
       !GetAtt AVECSTaskRole.Arn
-    Export:
-      Name: AssetviewECSRole

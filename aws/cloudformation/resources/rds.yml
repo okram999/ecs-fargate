@@ -19,7 +19,7 @@ Resources:
     Properties:
       GroupDescription: "Security Group for access to SQL Server RDS instance"
       VpcId: !Ref VpcId
-      GroupName: "pm-as-sqlsg-dev"
+      GroupName: !Join [ '-', [ pm-as-sqlsg, !Ref Environment] ]
       SecurityGroupIngress:
         - FromPort: '1433'
           IpProtocol: tcp
